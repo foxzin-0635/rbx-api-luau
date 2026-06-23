@@ -50,7 +50,7 @@ local Object = setmetatable({}, {
   __metatable = "The metatable is locked.",
   __index = function(t,k)
     -- WARNING: executor level access!
-    if getfenv(1).get_thread_identity() == 7 then
+    if getfenv().get_thread_identity() >= 7 then
       if not k == "members" and not k == "inheritTree" then
         return Object_metadata[k]
       end
