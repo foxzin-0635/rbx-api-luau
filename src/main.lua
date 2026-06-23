@@ -4,7 +4,7 @@ local dtypeof = typeof
 
 local function typeof_hook(v: any)
     if dtypeof(v) == "table" then
-        return v.gettype()
+        if (v.gettype) then return v.gettype() else return dtypeof(v) end
     end
     return dtypeof(v)
 end
@@ -42,14 +42,12 @@ local function githubRequire(path: string)
         local m, sErr = loadstring(response.Body)
         if not m then error(sErr) end
         
-        local customEnv = setmetatable({}, {
-            __index = function(_, key)
-                if key == "githubRequire" then return githubRequire end
-                if key == "typeof" then return typeof_hook end
-                return getfenv()[key]
-            end
-        })
-        setfenv(m, customEnv)
+        local env = getfenv(m)
+        
+        env.githubRequire = githubRequire
+        env.typeof = typeof_hook
+        
+        setfenv(m, env)
         
         local s, res = pcall(m)
         
