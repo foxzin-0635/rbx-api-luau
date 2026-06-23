@@ -1,5 +1,6 @@
 -- Base hooks for the project.
 local __modules = {}
+
 local function githubRequire(path: string)
     local OWNER = "foxzin-0635"
     local REPO = "rbx-api-luau"

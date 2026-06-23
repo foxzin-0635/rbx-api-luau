@@ -30,12 +30,13 @@ Object_metadata = {
       end
     }
   }
-  
+}
+export type Object = {
+  ClassName: string,
+  IsA: (self: Object) -> boolean
 }
 
-local Object = {}
-
-setmetatable(Object, {
+local tObject: Object = setmetatable({}, {
   __metatable = "The metatable is locked.",
   __index = function(t,k)
     for mk,mt in pairs(Object_metadata.members) do
@@ -62,4 +63,4 @@ setmetatable(Object, {
   end
 })
 
-return Object
+return tObject
