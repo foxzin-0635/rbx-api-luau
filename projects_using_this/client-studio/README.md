@@ -1,4 +1,4 @@
-# studio-client
+# client-studio
 An project for executors that will recreate the environment of Roblox Studio in the Client.
 
 Of course it won't be accurate since you only have access to client-side, but I'll make it nearly perfect to the original by using some _**tricks**_.
