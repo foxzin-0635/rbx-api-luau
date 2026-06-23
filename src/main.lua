@@ -2,7 +2,7 @@
 local __modules = {}
 local function githubRequire(path: string)
     local OWNER = "foxzin-0635"
-    local REPO = "test"
+    local REPO = "rbx-api-luau"
     local FILE_PATH = path
     local TOKEN = "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" -- note: renew every 1 day.
     local cleanPath = path:gsub("^%./", "")
@@ -14,7 +14,7 @@ local function githubRequire(path: string)
         return __modules[cleanPath]
     end
 
-    local url = "https://api.github.com/repos/" .. OWNER .. "/" .. REPO .. "/contents/" .. FILE_PATH
+    local url = "https://api.github.com/repos/" .. OWNER .. "/" .. REPO .. "/contents/" .. cleanPath
     local headers = {
         ["Authorization"] = "token " .. TOKEN,
         ["Accept"] = "application/vnd.github.v3.raw", -- Tells GitHub to return the raw file, not JSON
