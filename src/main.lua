@@ -1,5 +1,13 @@
 -- Base hooks for the project.
 local __modules = {}
+local dtypeof = typeof
+
+local function typeof_hook(v: any)
+    if dtypeof(v) == "table" then
+        return v.gettype()
+    end
+    return dtypeof(v)
+end
 
 local function githubRequire(path: string)
     local OWNER = "foxzin-0635"
@@ -37,6 +45,7 @@ local function githubRequire(path: string)
         local customEnv = setmetatable({}, {
             __index = function(_, key)
                 if key == "githubRequire" then return githubRequire end
+                if key == "typeof" then return typeof_hook end
                 return getfenv()[key]
             end
         })

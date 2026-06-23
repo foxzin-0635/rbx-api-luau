@@ -1,5 +1,9 @@
 local Object_metadata = {}
 
+local function gettype()
+  return Object_metadata.members.__type.Value
+end
+
 local function isA(self, className: string): boolean
   local it = Object_metadata.inheritTree
   local bt = string.split(it, ",")
@@ -19,26 +23,38 @@ Object_metadata = {
       MemberType = "Property",
       ValueType = "string",
       ReadOnly = true,
+      Scriptable = true,
       Value = "Object"
     },
     IsA = {
       MemberType = "Method",
       ValueType = "function",
       ReadOnly = true,
+      Scriptable = true,
       Value = function(self, className: string)
         return isA(self, className)
       end
+    },
+    __type = {
+      MemberType = "PrivateMetamethod",
+      ValueType = "metamethod",
+      ReadOnly = true,
+      Scriptable = false,
+      Value = "Object"
     }
-  }
-}
-export type Object = {
-  ClassName: string,
-  IsA: (self: Object) -> boolean
+  },
+  gettype = gettype
 }
 
-local tObject: Object = setmetatable({}, {
+local Object = setmetatable({}, {
   __metatable = "The metatable is locked.",
   __index = function(t,k)
+    -- WARNING: executor level access!
+    if getfenv(1).get_thread_identity() == 7 then
+      if not k == "members" and not k == "inheritTree" then
+        return Object_metadata[k]
+      end
+    end
     for mk,mt in pairs(Object_metadata.members) do
       if mk == k then
         return mt.Value
@@ -49,6 +65,7 @@ local tObject: Object = setmetatable({}, {
   __newindex = function(t, k, v)
     for mk,mt in pairs(Object_metadata.members) do
       if mk == k then
+        if not mt.Scriptable then break end
         if mt.ReadOnly then
           error("Unable to assign property "..k..". Property is read only")
         else
@@ -63,4 +80,4 @@ local tObject: Object = setmetatable({}, {
   end
 })
 
-return tObject
+return Object
