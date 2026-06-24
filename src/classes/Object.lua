@@ -22,7 +22,7 @@ end
 
 -- ReflectionMetadata like table.
 Object_metadata = {
-  ApiEquivalent = apidump.Classes[1]
+  ApiEquivalent = apidump.Classes[1],
   members = {
     ClassName = {
       ApiEquivalent = apidump.Classes[1].Members[1],
@@ -53,7 +53,7 @@ local Object = setmetatable({}, {
       end
     end
   end,
-  __tostring = Object_metadata.ApiEquivalent.Name
+  __tostring = Object_metadata.ApiEquivalent.Name,
   __newindex = function(t, k, v)
     local mt = Object_metadata.members[k]
     
