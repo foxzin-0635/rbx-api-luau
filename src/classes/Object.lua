@@ -29,11 +29,27 @@ end
 
 -- Mimic the behavior of the original :IsA(className)
 local function isA(self, className: string): boolean
+  if not Runtime:IsEngineScript() then
+    rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = true
+    Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
+  
+    local v = false
+    
+    for i = 1, #self.__inheritIdxs do
+      if className == apidump.Classes[tonumber(bt[i])].Name then v = true break end
+    end
+    
+    return v
+  end
+  
   local v = false
   
   for i = 1, #self.__inheritIdxs do
     if className == apidump.Classes[tonumber(bt[i])].Name then v = true break end
   end
+  
+  rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
+  Runtime:SetIdentityLevelByContext("None")
   
   return v
 end
