@@ -1,27 +1,38 @@
+local Security = githubRequire("src/utils/Security.lua")
 local Runtime = {}
 
 function Runtime:IsStandardScript()
-  return getfenv().get_thread_identity() == 2
+  return Security.Standard:IsInRange(getfenv().get_thread_identity())
 end
 
-function Runtime:IsReservedCoreScript()
-  return getfenv().get_thread_identity() == 3
+function Runtime:IsRobloxPlaceScript()
+  return getfenv().get_thread_identity() == Security.RobloxPlace
 end
 
 function Runtime:IsCommandBarScript()
-  return getfenv().get_thread_identity() == 4
+  return getfenv().get_thread_identity() == Security.CommandBar
 end
 
 function Runtime:IsStandardPluginScript()
-  return getfenv().get_thread_identity() == 5
+  return getfenv().get_thread_identity() == Security.PluginSecurity
 end
 
-function Runtime:IsElevatedPluginScript()
-  return getfenv().get_thread_identity() == 6
+function Runtime:IsLocalUserScript()
+  return getfenv().get_thread_identity() == Security.LocalUserSecurity
 end
 
 function Runtime:IsCoreScript()
-  return getfenv().get_thread_identity() >= 7
+  return getfenv().get_thread_identity() >= Security.RobloxScriptSecurity
+end
+
+function Runtime:IsRobloxScript()
+  if not rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse then warn("Hack for RobloxSecurity was not set! Please configure the module.") return false end
+  return getfenv().get_thread_identity() == rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.IdentityLevel
+end
+
+function Runtime:IsEngineScript()
+  if not rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then warn("Hack for NotAccessibleSecurity was not set! Please configure the module.") return false end
+  return getfenv().get_thread_identity() == rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.IdentityLevel
 end
 
 function Runtime:gettype()

@@ -1,12 +1,13 @@
 local Runtime = githubRequire("src/utils/Runtime.lua")
+local Security = githubRequire("src/utils/Security.lua")
 local Object_metadata = {}
 
 -- for typeof_hook(v)
 local function gettype()
-  return Object_metadata.members.__type.Value
+  return Object_metadata.ApiEquivalent.Name
 end
 
--- Mimick the behavior of the original :IsA(className)
+-- Mimic the behavior of the original :IsA(className)
 local function isA(self, className: string): boolean
   local it = Object_metadata.inheritTree
   local bt = string.split(it, ",")
@@ -21,30 +22,17 @@ end
 
 -- ReflectionMetadata like table.
 Object_metadata = {
-  inheritTree = "Object", -- for :IsA(className)
+  ApiEquivalent = apidump.Classes[1]
   members = {
     ClassName = {
-      MemberType = "Property",
-      ValueType = "string",
-      ReadOnly = true,
-      Scriptable = true,
+      ApiEquivalent = apidump.Classes[1].Members[1],
       Value = "Object"
     },
     IsA = {
-      MemberType = "Method",
-      ValueType = "function",
-      ReadOnly = true,
-      Scriptable = true,
+      ApiEquivalent = apidump.Classes[1].Members[4],
       Value = function(self, className: string)
         return isA(self, className)
       end
-    },
-    __type = {
-      MemberType = "PrivateMetamethod",
-      ValueType = "metamethod",
-      ReadOnly = true,
-      Scriptable = false,
-      Value = "Object"
     }
   },
   gettype = gettype -- for typeof_hook(v)
@@ -54,8 +42,8 @@ local Object = setmetatable({}, {
   __metatable = "The metatable is locked",
   __index = function(t,k)
     -- WARNING: executor level access!
-    if Runtime:IsCoreScript() then
-      if k ~= "members" and k ~= "inheritTree" then
+    if Runtime:IsEngineScript() then
+      if k ~= "members" then
         return Object_metadata[k]
       end
     end
@@ -65,16 +53,16 @@ local Object = setmetatable({}, {
       end
     end
   end,
-  __tostring = Object_metadata.members.ClassName.Value,
+  __tostring = Object_metadata.ApiEquivalent.Name
   __newindex = function(t, k, v)
     local mt = Object_metadata.members[k]
     
     if mt then
-      if not mt.Scriptable then error("Attempt to index nil with "+typeof(v)) end
-      if mt.ReadOnly then
+      if table.find(mt.ApiEquivalent.Tags, "NotScriptable") then error("Attempt to index nil with "+typeof(v)) end
+      if table.find(mt.ApiEquivalent.Tags, "ReadOnly") then
         error("Unable to assign property "..k..". Property is read only")
       else
-        if type(v) == mt.ValueType then
+        if type(v) == mt.ApiEquivalent.ValueType.Name then
           mt.Value = v
         else
           error("Type '"..type(v).."' could not be converted into '"..mt.ValueType.."'")

@@ -1,4 +1,6 @@
 -- Base hooks for the project.
+local config
+local api_dump_latest
 local __modules = {}
 local dtypeof = typeof
 
@@ -46,6 +48,9 @@ local function githubRequire(path: string, nameReplacement: string?)
         
         env.githubRequire = githubRequire
         env.typeof = typeof_hook
+        env.apidump = api_dump_latest
+        
+        if not cleanPath:match("src/config%.lua") then env.rbx_api_config = config end
         
         setfenv(m, env)
         
@@ -63,11 +68,30 @@ local function githubRequire(path: string, nameReplacement: string?)
 end
 
 local function GetModule(path: string)
-    return __modules[path:gsub("^%./", "")]
+    config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = true
+    local md = __modules[path:gsub("^%./", "")]
+    if not md then error("Cannot get module '"..path.."' since it's non-existent.")
+    local cur_idl = getfenv().get_thread_identity()
+    getfenv().set_thread_identity(-1)
+    local apidmp_class = md.ApiEquivalent
+    if apidmp_class then
+        if table.find(apidmp_class.Tags, "NotReplicated") then
+            config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
+            getfenv().set_thread_identity(cur_idl)
+            warn("Cannot get class '"..path.."' since it's an internal Roblox Class.")
+            return nil
+        end
+    end
+    config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
+    getfenv().set_thread_identity(cur_idl)
+    return md
 end
 
+config = githubRequire("src/config.lua", "rbx_api_config")
+api_dump_latest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json"))
+
 -- Classes
-githubRequire("src/classes/Object.lua") -- Base class
+githubRequire("src/classes/Object.lua", "Object") -- Base class
 
 -- Subprojects
 githubRequire("projects_using_this/client-studio/src/main.lua", "client-studio") -- client-studio subproject
