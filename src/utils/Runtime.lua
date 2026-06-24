@@ -1,4 +1,4 @@
-local Security = GetModule("Security")
+local Security = getModule("Security")
 local Runtime = {}
 
 function Runtime:SetIdentityLevel(idl: number)

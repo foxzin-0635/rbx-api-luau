@@ -1,4 +1,4 @@
-local Runtime = GetModule("Runtime")
+local Runtime = getModule("Runtime")
 
 -- Inherits from
 local Object = githubRequire("src/classes/Object.lua")
