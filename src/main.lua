@@ -146,8 +146,8 @@ config = githubRequire("src/config.lua", "rbx_api_config")
 api_dump_latest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json"))
 
 -- src/utils
-RegisterModule("src/utils/Runtime.lua", "Runtime")
 RegisterModule("src/utils/Security.lua", "Security")
+RegisterModule("src/utils/Runtime.lua", "Runtime")
 RegisterModule("src/utils/Range.lua", "Range")
 
 -- Classes
