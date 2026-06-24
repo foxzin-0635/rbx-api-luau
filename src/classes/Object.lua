@@ -28,8 +28,9 @@ local function getApiInfo()
 end
 
 -- Mimic the behavior of the original :IsA(className)
-local function isA(self, className: string): boolean
+local function isA(className: string): boolean
   local v = false
+  
   for i = 1, #self.__inheritIdxs do
     if className == apidump.Classes[tonumber(bt[i])].Name then v = true break end
   end
@@ -39,6 +40,7 @@ end
 
 Object.ClassName = __api_info.Name
 Object.IsA = isA
+
 Object.__inheritIdxs = {1}
 Object.gettype = gettype
 Object.getApiInfo = getApiInfo
