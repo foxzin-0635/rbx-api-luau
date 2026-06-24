@@ -36,7 +36,7 @@ local function isA(self, className: string): boolean
     local v = false
     
     for i = 1, #self.__inheritIdxs do
-      if className == apidump.Classes[tonumber(bt[i])].Name then v = true break end
+      if className == apidump.Classes[tonumber(self.__inheritIdxs[i])].Name then v = true break end
     end
     
     return v
@@ -45,7 +45,7 @@ local function isA(self, className: string): boolean
   local v = false
   
   for i = 1, #self.__inheritIdxs do
-    if className == apidump.Classes[tonumber(bt[i])].Name then v = true break end
+    if className == apidump.Classes[tonumber(self.__inheritIdxs[i])].Name then v = true break end
   end
   
   rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
