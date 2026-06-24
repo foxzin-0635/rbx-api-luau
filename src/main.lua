@@ -15,7 +15,7 @@ local function githubRequire(path: string, nameReplacement: string?)
     local OWNER = "foxzin-0635"
     local REPO = "rbx-api-luau"
     local FILE_PATH = path
-    local TOKEN = "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" -- note: renew every 1 day.
+    local TOKEN = "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" -- note: renew every 1 day.
     local cleanPath = path:gsub("^%./", "")
     if not cleanPath:find("%.lua$") then
         cleanPath = cleanPath .. ".lua"
