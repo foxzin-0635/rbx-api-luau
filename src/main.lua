@@ -98,6 +98,8 @@ githubRequire("src/classes/Object.lua", "Object") -- Base class
 githubRequire("projects_using_this/client-studio/src/main.lua", "client-studio") -- client-studio subproject
 
 -- Add helper method
+__modules.__api_dump = api_dump_latest
+__modules.config = config
 __modules.GetModule = GetModule
 
 -- Return the new modules table.
