@@ -1,4 +1,4 @@
-local Runtime = GetModule("Runtime")
+local Runtime = getModule("Runtime")
 local __api_info = apidump.Classes[1]
 
 local Object = {}
