@@ -1,11 +1,11 @@
 -- Base hooks for the project.
 -- Variables
-local rbx_api = {}
-local config
-local api_dump_latest
-local __modules = {}
-local __rbxClasses = {}
-local dtypeof = typeof
+local rbx_api = {} -- Main module table
+local config -- Module config
+local api_dump_latest -- a luau table version of MaximumADHD's "API-Dump.json"
+local __modules = {} -- holds general classes
+local __rbxClasses = {} -- holds Roblox classes
+local dtypeof = typeof -- typeof backup
 
 -- Functions
 -- Explanations further down
@@ -127,7 +127,7 @@ GetModule = function(name: string)
 end
 -- Here you can get loaded Roblox classes from the "__rbxClasses" table.
 GetRbxClass = function(name: string)
-    if config.CanImportAnyClass then return __rbxClasses[name] end
+    if config.CanImportAnyClass then if __rbxClasses[name] then return __rbxClasses[name] else error("Cannot get class '"..name.."' since it's non-existent.") end end
     local Runtime = GetModule("Runtime")
     
     if config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then
@@ -135,7 +135,7 @@ GetRbxClass = function(name: string)
         Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
         
         local md = __rbxClasses[name]
-        if not md then error("Cannot get module '"..name.."' since it's non-existent.") end
+        if not md then error("Cannot get class '"..name.."' since it's non-existent.") end
         local apidmp_class = md.getApiInfo()
         if apidmp_class then
             if table.find(apidmp_class.Tags, "NotReplicated") then
@@ -145,7 +145,7 @@ GetRbxClass = function(name: string)
             end
         end
         Runtime:SetIdentityLevel(cur_idl)
-        return md
+        error("Class '"..name.."' has no API info!")
     end
     
     local cur_idl = Runtime:GetIdentityLevel()
@@ -153,7 +153,7 @@ GetRbxClass = function(name: string)
     Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
     
     local md = __rbxClasses[name]
-    if not md then error("Cannot get module '"..name.."' since it's non-existent.") end
+    if not md then error("Cannot get class '"..name.."' since it's non-existent.") end
     local apidmp_class = md.getApiInfo()
     if apidmp_class then
         if table.find(apidmp_class.Tags, "NotReplicated") then
@@ -165,7 +165,7 @@ GetRbxClass = function(name: string)
     end
     config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
     Runtime:SetIdentityLevel(cur_idl)
-    return md
+    error("Class '"..name.."' has no API info!")
 end
 
 --                   [-CONFIGURATION-]                   --

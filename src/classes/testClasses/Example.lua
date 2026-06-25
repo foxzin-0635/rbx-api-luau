@@ -1,7 +1,7 @@
 local Runtime = getModule("Runtime")
 
 -- Inherits from
-local Object = githubRequire("src/classes/Object.lua")
+local Object = getRbxClass("rbx-classes/Object")
 
 -- Hook new custom class into API-Dump
 local __api_info = {
@@ -31,7 +31,7 @@ local function gettype()
 end
 
 local function getApiInfo()
-  if Runtime:IsEngineScript() then
+  if Runtime:IsEngineScript(true) then
     return __api_info
   end
 end
@@ -40,7 +40,7 @@ local Example = {}
 local metatable = {
   __metatable = "The metatable is locked",
   __index = function(t,k)
-    if Runtime:IsEngineScript() then return rawget(Example, k) end
+    if Runtime:IsEngineScript(true) then return rawget(Example, k) end
     return rawget(t, k)
   end,
   __tostring = function(t)
@@ -60,7 +60,7 @@ Example.getApiInfo = getApiInfo
 function Example.constructor()
   local self = Object.unprotectedconstructor()
   
-  self.PrintHello = function() print("Hello") end
+  self.PrintHello = function(self) print("Hello") end
   self.ClassName = __api_info.Name
   
   setmetatable(self, metatable)
@@ -69,10 +69,11 @@ end
 
 -- for inheritance
 function Example.unprotectedconstructor()
-  if not Runtime:IsEngineScript() then error("Attempt to use a protected constructor for "..__api_info.Name) return end
+  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) return end
   local self = Object.unprotectedconstructor()
   
-  self.PrintHello = function() print("Hello") end
+  self.PrintHello = function(self) print("Hello") end
+  self.ClassName = __api_info.Name
   
   return self
 end

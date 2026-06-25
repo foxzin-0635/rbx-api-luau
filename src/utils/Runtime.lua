@@ -58,13 +58,13 @@ function Runtime:IsCoreScript()
   return self:GetIdentityLevel() == Security:GetIdentityLevelByContext("RobloxScriptSecurity")
 end
 
-function Runtime:IsRobloxScript()
-  if not rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse then warn("Hack for RobloxSecurity was not set! Please configure the module.") return false end
+function Runtime:IsRobloxScript(silentWarning: boolean)
+  if not rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse then if not silentWarning then warn("Hack for RobloxSecurity was not set! Please configure the module.") end return false end
   return self:GetIdentityLevel() == rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.IdentityLevel
 end
 
-function Runtime:IsEngineScript()
-  if not rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then warn("Hack for NotAccessibleSecurity was not set! Please configure the module.") return false end
+function Runtime:IsEngineScript(silentWarning: boolean)
+  if not rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then if not silentWarning then warn("Hack for NotAccessibleSecurity was not set! Please configure the module.") end return false end
   return self:GetIdentityLevel() == rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.IdentityLevel
 end
 

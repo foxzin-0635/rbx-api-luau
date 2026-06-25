@@ -5,7 +5,7 @@ local Object = {}
 local metatable = {
   __metatable = "The metatable is locked",
   __index = function(t,k)
-    if Runtime:IsEngineScript() then return rawget(Object, k) end
+    if Runtime:IsEngineScript(true) then return rawget(Object, k) end
     return rawget(t, k)
   end,
   __tostring = function(t)
@@ -22,14 +22,14 @@ local function gettype()
 end
 
 local function getApiInfo()
-  if Runtime:IsEngineScript() then
+  if Runtime:IsEngineScript(true) then
     return __api_info
   end
 end
 
 -- Mimic the behavior of the original :IsA(className)
 local function isA(self, className: string): boolean
-  if not Runtime:IsEngineScript() then
+  if not Runtime:IsEngineScript(true) then
     rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = true
     Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
   
@@ -70,7 +70,7 @@ end
 
 -- for inheritance
 function Object.unprotectedconstructor()
-  if not Runtime:IsEngineScript() then error("Attempt to use a protected constructor for "..__api_info.Name) return end
+  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) return end
   local self = {}
   self.ClassName = __api_info.Name
   self.IsA = isA
