@@ -58,18 +58,20 @@ Example.gettype = gettype
 Example.getApiInfo = getApiInfo
 
 function Example.constructor()
+  Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
   local self = Object.unprotectedconstructor()
   
   self.PrintHello = function(self) print("Hello") end
   self.ClassName = __api_info.Name
   
   setmetatable(self, metatable)
+  Runtime:SetIdentityLevelByContext("None")
   return self
 end
 
 -- for inheritance
 function Example.unprotectedconstructor()
-  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) return end
+  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) end
   local self = Object.unprotectedconstructor()
   
   self.PrintHello = function(self) print("Hello") end

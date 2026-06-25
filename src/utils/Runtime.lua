@@ -10,17 +10,31 @@ function Runtime:GetIdentityLevel()
 end
 
 function Runtime:SetIdentityLevelByContext(context: string)
+  local cur = self:GetIdentityLevel()
   local identityLevel = Security:GetIdentityLevelByContext(context)
   
-  if identityLevel then self:SetIdentityLevel(identityLevel) return end
+  if identityLevel then
+    self:SetIdentityLevel(identityLevel)
+    return
+  end
   if context == "RobloxSecurity" then
-    if not rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse then error("Hack for RobloxSecurity was not set! Please configure the module.") end
-    self:SetIdentityLevel(rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.IdentityLevel)
+    if cur == 9 then
+      rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
+      rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.IdentityLevel = -1
+    end
+    rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse = true
+    rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.IdentityLevel = 8
+    self:SetIdentityLevel(8)
     return
   end
   if context == "NotAccessibleSecurity" then
-    if not rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then error("Hack for NotAccessibleSecurity was not set! Please configure the module.") end
-    self:SetIdentityLevel(rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.IdentityLevel)
+    if cur == 8 then
+      rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.CanUse = false
+      rbx_api_config.SimulatedIdentityHacks.RobloxSecurity.IdentityLevel = -1
+    end
+    rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = true
+    rbx_api_config.SimulatedIdentityHacks.NotAccessibleSecurity.IdentityLevel = 9
+    self:SetIdentityLevel(9)
     return
   end
   error("Unknown security context: "..context)

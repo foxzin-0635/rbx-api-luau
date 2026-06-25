@@ -62,6 +62,7 @@ Object.gettype = gettype
 Object.getApiInfo = getApiInfo
 
 function Object.constructor()
+  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) end
   local self = setmetatable({}, metatable)
   self.ClassName = __api_info.Name
   self.IsA = isA
@@ -70,7 +71,7 @@ end
 
 -- for inheritance
 function Object.unprotectedconstructor()
-  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) return end
+  if not Runtime:IsEngineScript(true) then error("Attempt to use a protected constructor for "..__api_info.Name) end
   local self = {}
   self.ClassName = __api_info.Name
   self.IsA = isA

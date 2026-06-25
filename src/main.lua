@@ -134,25 +134,6 @@ GetRbxClass = function(name: string)
     if config.CanImportAnyClass then if __rbxClasses[name] then return __rbxClasses[name] else error("Cannot get class '"..name.."' since it's non-existent.") end end
     local Runtime = GetModule("Runtime")
     
-    if config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse then
-        local cur_idl = Runtime:GetIdentityLevel()
-        Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
-        
-        local md = __rbxClasses[name]
-        if not md then error("Cannot get class '"..name.."' since it's non-existent.") end
-        local apidmp_class = md.getApiInfo()
-        if apidmp_class then
-            if table.find(apidmp_class.Tags, "NotReplicated") then
-                Runtime:SetIdentityLevel(cur_idl)
-                error("Cannot get class '"..name.."' since it's an internal Roblox Class.")
-            end
-        end
-        Runtime:SetIdentityLevel(cur_idl)
-        error("Class '"..name.."' has no API info!")
-    end
-    
-    local cur_idl = Runtime:GetIdentityLevel()
-    config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = true
     Runtime:SetIdentityLevelByContext("NotAccessibleSecurity")
     
     local md = __rbxClasses[name]
@@ -160,13 +141,11 @@ GetRbxClass = function(name: string)
     local apidmp_class = md.getApiInfo()
     if apidmp_class then
         if table.find(apidmp_class.Tags, "NotReplicated") then
-            config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
-            Runtime:SetIdentityLevel(cur_idl)
+            Runtime:SetIdentityLevelByContext("None")
             error("Cannot get class '"..name.."' since it's an internal Roblox Class.")
         end
     end
-    config.SimulatedIdentityHacks.NotAccessibleSecurity.CanUse = false
-    Runtime:SetIdentityLevel(cur_idl)
+    Runtime:SetIdentityLevelByContext("None")
     error("Class '"..name.."' has no API info!")
 end
 
