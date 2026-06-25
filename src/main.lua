@@ -153,7 +153,8 @@ end
 
 --> Necessary files
 config = githubRequire("src/config.lua", "rbx_api_config")
-api_dump_latest = game:GetService("HttpService"):JSONDecode(game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json", true)) -- Thanks to MaximumADHD for "API-Dump.json" <3
+-- Reverted to original
+api_dump_latest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json")) -- Thanks to MaximumADHD for "API-Dump.json" <3
 
 --> Modules from "src/utils"
 RegisterModule("src/utils/Security.lua", "Security")
