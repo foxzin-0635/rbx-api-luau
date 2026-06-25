@@ -21,7 +21,7 @@ local __api_info = {
   MemoryCategory = "Instances",
   Name = "Example",
   Superclass = "Object",
-  Tags = {"NotCreatable"}
+  Tags = {"NotCreatable", "NotReplicated"}
 }
 table.insert(apidump.Classes, __api_info)
 
@@ -61,6 +61,7 @@ function Example.constructor()
   local self = Object.unprotectedconstructor()
   
   self.PrintHello = function() print("Hello") end
+  self.ClassName = __api_info.Name
   
   setmetatable(self, metatable)
   return self
