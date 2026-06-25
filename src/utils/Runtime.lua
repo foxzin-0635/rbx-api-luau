@@ -2,11 +2,11 @@ local Security = getModule("Security")
 local Runtime = {}
 
 function Runtime:SetIdentityLevel(idl: number)
-  getfenv().set_thread_identity(idl)
+  thread_identity.Value = idl
 end
 
 function Runtime:GetIdentityLevel()
-  return getfenv().get_thread_identity()
+  return thread_identity
 end
 
 function Runtime:SetIdentityLevelByContext(context: string)

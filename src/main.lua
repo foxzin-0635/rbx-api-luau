@@ -7,6 +7,9 @@ local __modules = {} -- holds general classes
 local __rbxClasses = {} -- holds Roblox classes
 local dtypeof = typeof -- typeof backup
 
+local __idl = Instance.new("NumberValue")
+__idl.Value = 2
+
 -- Functions
 -- Explanations further down
 local RegisterModule
@@ -79,6 +82,7 @@ local function githubRequire(path: string)
         env.autoGenerateMembersWithValues = AutoGenerateMembersWithValues
         env.getModule = GetModule
         env.getRbxClass = GetRbxClass
+        env.thread_identity = __idl
         
         -- Not sure why i did this. :P
         if not cleanPath:match("src/config%.lua") then env.rbx_api_config = config end
@@ -170,7 +174,7 @@ end
 
 --> Necessary files
 config = githubRequire("src/config.lua", "rbx_api_config")
-api_dump_latest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json")) -- Thanks to MaximumADHD for "API-Dump.json" <3
+api_dump_latest = game:GetService("HttpService"):JSONDecode(game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/refs/heads/roblox/API-Dump.json", true)) -- Thanks to MaximumADHD for "API-Dump.json" <3
 
 --> Modules from "src/utils"
 RegisterModule("src/utils/Security.lua", "Security")
