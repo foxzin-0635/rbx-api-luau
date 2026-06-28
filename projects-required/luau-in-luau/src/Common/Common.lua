@@ -89,6 +89,15 @@ local FValueClass: FValueModule = (function()
     return self
   end
   
+  function module.dumpFlags()
+    local current = module.list
+    print("--- Current FValues Linked List ---")
+    while current do
+        print(string.format("Flag: %s | Value: %s", current.name, tostring(current.value)))
+        current = current.next -- Step to the next node in the chain
+    end
+  end
+  
   setmetatable(module, metatable)
   return module
 end)()
@@ -145,6 +154,8 @@ local function LUAU_FASTFLAGVARIABLE(flag: string): FValue<boolean>
   return fflag
 end
 
+local FInt = {} -- namespace
+
 local LUAU_FASTINT: FValue<number>
 local function LUAU_FASTINTVARIABLE(flag: string, def: number): FValue<number>
   local fflag = FValueClass.new(flag, def, false)
@@ -152,12 +163,16 @@ local function LUAU_FASTINTVARIABLE(flag: string, def: number): FValue<number>
   return fflag
 end
 
+local DFFlag = {} -- namespace
+
 local LUAU_DYNAMICFASTFLAG: FValue<boolean>
 local function LUAU_DYNAMICFASTFLAGVARIABLE(flag: string): FValue<boolean>
   local fflag = FValueClass.new(flag, false, true)
   FFlag[flag] = fflag
   return fflag
 end
+
+local DFInt = {} -- namespace
 
 local LUAU_DYNAMICFASTINT: FValue<number>
 local function LUAU_DYNAMICFASTINTVARIABLE(flag: string, def: number): FValue<number>
@@ -181,18 +196,21 @@ Luau.FValueVersionSetter = FValueVersionSetterClass
 FFlag.LUAU_FASTFLAG = LUAU_FASTFLAG
 FFlag.LUAU_FASTFLAGVARIABLE = LUAU_FASTFLAGVARIABLE
 
-FFlag.LUAU_FASTINT = LUAU_FASTINT
-FFlag.LUAU_FASTINTVARIABLE = LUAU_FASTINTVARIABLE
+FInt.LUAU_FASTINT = LUAU_FASTINT
+FInt.LUAU_FASTINTVARIABLE = LUAU_FASTINTVARIABLE
 
-FFlag.LUAU_DYNAMICFASTFLAG = LUAU_DYNAMICFASTFLAG
-FFlag.LUAU_DYNAMICFASTFLAGVARIABLE = LUAU_DYNAMICFASTFLAGVARIABLE
+DFFlag.LUAU_DYNAMICFASTFLAG = LUAU_DYNAMICFASTFLAG
+DFFlag.LUAU_DYNAMICFASTFLAGVARIABLE = LUAU_DYNAMICFASTFLAGVARIABLE
 
-FFlag.LUAU_DYNAMICFASTINT = LUAU_DYNAMICFASTINT
-FFlag.LUAU_DYNAMICFASTINTVARIABLE = LUAU_DYNAMICFASTINTVARIABLE
+DFInt.LUAU_DYNAMICFASTINT = LUAU_DYNAMICFASTINT
+DFInt.LUAU_DYNAMICFASTINTVARIABLE = LUAU_DYNAMICFASTINTVARIABLE
 
 Common.Namespaces = {}
 Common.Namespaces.Luau = Luau
 Common.Namespaces.FFlag = FFlag
+Common.Namespaces.FInt = FInt
+Common.Namespaces.DFFlag = DFFlag
+Common.Namespaces.DFInt = DFInt
 
 Common.Defines = {}
 Common.Defines.LUAU_ASSERT = LUAU_ASSERT
@@ -201,6 +219,9 @@ Common.Defines.LUAU_ASSERT = LUAU_ASSERT
 local env = {}
 env.Luau = Luau
 env.FFlag = FFlag
+env.FInt = FInt
+env.DFFlag = DFFlag
+env.DFInt = DFInt
 env.LUAU_ASSERT = LUAU_ASSERT
 
 return {
@@ -209,6 +230,9 @@ return {
   NewEnvItemsNames = {
     "Luau",
     "FFlag",
+    "FInt",
+    "DFFlag",
+    "DFInt",
     "LUAU_ASSERT"
   }
 }
