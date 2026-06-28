@@ -130,7 +130,7 @@ local function LUAU_FASTFLAGVARIABLE(flag: string): FValue<<boolean>>
   return fflag
 end
 
-local LUAU_FASTINT: FValue<<boolean>>
+local LUAU_FASTINT: FValue<<number>>
 local function LUAU_FASTINTVARIABLE(flag: string, def: number)
   local fflag = FValueClass.new<<number>>(flag, def, false)
   FFlag[flag] = fflag
@@ -144,7 +144,7 @@ local function LUAU_DYNAMICFASTFLAGVARIABLE(flag: string): FValue<<boolean>>
   return fflag
 end
 
-local LUAU_DYNAMICFASTINT: FValue<<boolean>>
+local LUAU_DYNAMICFASTINT: FValue<<number>>
 local function LUAU_DYNAMICFASTINTVARIABLE(flag: string, def: number)
   local fflag = FValueClass.new<<number>>(flag, def, true)
   FFlag[flag] = fflag
