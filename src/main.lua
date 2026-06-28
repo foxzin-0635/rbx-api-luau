@@ -7,7 +7,7 @@ local __modules = {} -- holds general classes
 local __rbxClasses = {} -- holds Roblox classes
 local dtypeof = typeof -- typeof backup
 
-local __token = "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" -- use this instead of rewriting the same token across githubRequire functions.
+local __token = "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" -- use this instead of rewriting the same token across githubRequire functions.
 
 local __idl = Instance.new("NumberValue")
 __idl.Value = 2
