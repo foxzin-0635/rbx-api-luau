@@ -139,7 +139,7 @@ end
 
 local LUAU_DYNAMICFASTFLAG: FValue<<boolean>>
 local function LUAU_DYNAMICFASTFLAGVARIABLE(flag: string): FValue<<boolean>>
-  local fflag FValueClass.new<<boolean>>(flag, false, true)
+  local fflag = FValueClass.new<<boolean>>(flag, false, true)
   FFlags[flag] = fflag
   return fflag
 end
