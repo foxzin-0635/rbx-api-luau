@@ -59,10 +59,10 @@ local function pcallForNewContents()
         return Common_contents
     end)
     
-    if not s0 then error("Failed to retrieve module's new content, module is: Common/Common.lua;\nError give was: "..res0) end
+    --if not s0 then error("Failed to retrieve module's new content, module is: Common/Common.lua;\nError given was: "..res0) end
     
     -- Join all
-    if res0 then newCConcat(res, res0) end
+    if res0 and dtypeof(res0) == "table" then newCConcat(res, res0) end
     return res
 end
 
