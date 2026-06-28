@@ -15,6 +15,7 @@ export type FValue<T> = {
   dynamic: boolean,
   value: T,
   next: FValue<any>?
+  version: number
 }
 
 local activeHandler: AssertHandler? = nil
@@ -29,7 +30,7 @@ end
 local function assertCallHandler(expr: string, file: string, line: number, func: string): number
   local handler = assertHandler()
   if handler then
-    return handler(expr, file, line, number)
+    return handler(expr, file, line, func)
   end
   return 1
 end
@@ -57,7 +58,7 @@ local FValueClass = (function()
     end
   }
   
-  module.list = {}
+  module.list = {} :: FValue<any>?
   module.type = "FValue"
   module.version = 0
   
