@@ -140,28 +140,28 @@ local FFlag = {} -- namespace
 -- FFlags
 local LUAU_FASTFLAG: FValue<boolean>
 local function LUAU_FASTFLAGVARIABLE(flag: string): FValue<boolean>
-  local fflag = FValueClass.new<boolean>(flag, false, false)
+  local fflag = FValueClass.new(flag, false, false)
   FFlag[flag] = fflag
   return fflag
 end
 
 local LUAU_FASTINT: FValue<number>
 local function LUAU_FASTINTVARIABLE(flag: string, def: number): FValue<number>
-  local fflag = FValueClass.new<number>(flag, def, false)
+  local fflag = FValueClass.new(flag, def, false)
   FFlag[flag] = fflag
   return fflag
 end
 
 local LUAU_DYNAMICFASTFLAG: FValue<boolean>
 local function LUAU_DYNAMICFASTFLAGVARIABLE(flag: string): FValue<boolean>
-  local fflag = FValueClass.new<boolean>(flag, false, true)
+  local fflag = FValueClass.new(flag, false, true)
   FFlag[flag] = fflag
   return fflag
 end
 
 local LUAU_DYNAMICFASTINT: FValue<number>
 local function LUAU_DYNAMICFASTINTVARIABLE(flag: string, def: number): FValue<number>
-  local fflag = FValueClass.new<number>(flag, def, true)
+  local fflag = FValueClass.new(flag, def, true)
   FFlag[flag] = fflag
   return fflag
 end
