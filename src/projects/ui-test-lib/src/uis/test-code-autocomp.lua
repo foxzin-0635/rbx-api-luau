@@ -47,6 +47,20 @@ function autoc.Init()
                   Position = UDim2.fromScale(0.5,0),
                   AnchorPoint = Vector2.new(0.5,0)
                 },
+                {
+                  ClassName = "TextBox",
+                  ClearTextOnFocus = false,
+                  BorderSizePixel = 0,
+                  Size = UDim2.new(1,0,1,0),
+                  Multiline = true,
+                  BackgroundTransparency = 1,
+                  
+                  TextColor = Color3.fromRGB(255,255,255),
+                  Font = Enum.Font.Code,
+                  PlaceholderText = "-- Code here",
+                  Text = "",
+                  TextSize = 10
+                }
               }
             }
           }
@@ -55,8 +69,8 @@ function autoc.Init()
     }
   }, nil, game:GetService("CoreGui"))
 
-  task.wait(15)
-  menu:Destroy()
+  -- task.wait(15)
+  -- menu:Destroy()
 end
 
 return autoc
