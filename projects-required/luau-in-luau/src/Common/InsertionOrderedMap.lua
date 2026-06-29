@@ -8,7 +8,7 @@ type InsertionOrderedMapModule<K, V> = {
   get: (k: K) -> V?,
   begin: () -> K?,
   end_: () -> K?, -- end is a keyword, so add a random supported character for the identifier to change it to a identifier.
-  find: (k: K) -> V?,
+  -- find: (k: K) -> V?, -- it's the exact same as get() when simplified.
   erase: (k: K) -> ()
 }
 
@@ -61,12 +61,7 @@ local InsertionOrderedMapClass: InsertionOrderedMapModule<any, any> = (function(
   end
   
   function module:get(k: K): V?
-    local i = table.find(self.__order, k)
-    if not i then
-      return nil
-    else
-      return self.__pairs[k]
-    end
+    return self.__pairs[k]
   end
   
   function module:begin(): K?
@@ -77,10 +72,6 @@ local InsertionOrderedMapClass: InsertionOrderedMapModule<any, any> = (function(
   function module:end_(): K?
     local key = self.__order[#self.__order]
     return key
-  end
-  
-  function module:find(k: K): V?
-    return self.__pairs[k]
   end
   
   function module:erase(k: K): ()
