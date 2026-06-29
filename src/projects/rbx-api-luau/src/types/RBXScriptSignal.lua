@@ -143,12 +143,13 @@ function RBXScriptSignal.new()
   end
   
   self.Fire = function(self, ...: any)
+    local args = {...}
     for i, t in ipairs(__connections) do
       if t.connection.Disconnected then
         table.remove(__connections, i)
       end
       
-      local v: any = t.connection.func(...)
+      local v: any = t.connection.func(args)
       
       if t.type == "once" then
         t.connection:Disconnect()
