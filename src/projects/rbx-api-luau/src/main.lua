@@ -70,7 +70,7 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         Headers = headers
     })
     
-    if config.debugOutputRequirePaths then
+    if not cleanPath:match("src/config%.lua") and config.debugOutputRequirePaths then
         print(cleanPath)
     end
     
