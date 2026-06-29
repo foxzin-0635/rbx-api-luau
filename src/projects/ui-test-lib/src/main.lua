@@ -98,6 +98,9 @@ end
 --> Example:
 -- RegisterModule("src/scripts/HelloWorld.lua", "HelloWorld", false)
 
+RegisterModule("src/utils/CreateRecursive.lua", "CreateRecursive", false)
+RegisterModule("src/uis/test-code-autocomp.lua", "test-autoc", false)
+
 --> Build module
 ui.GetModule = GetModule
 return ui
