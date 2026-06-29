@@ -55,7 +55,7 @@ function autoc.Init()
                   MultiLine = true,
                   BackgroundTransparency = 1,
                   
-                  TextColor = Color3.fromRGB(255,255,255),
+                  TextColor3 = Color3.fromRGB(255,255,255),
                   Font = Enum.Font.Code,
                   PlaceholderText = "-- Code here",
                   Text = "",
