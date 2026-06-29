@@ -58,6 +58,9 @@ local metatable = {
   end
 }
 
+RBXScriptSignal.gettype = gettype
+RBXScriptSignal.getApiInfo = getApiInfo
+
 function RBXScriptSignal.new()
   local self = {}
   

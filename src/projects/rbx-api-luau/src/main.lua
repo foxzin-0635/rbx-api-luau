@@ -166,6 +166,10 @@ RegisterModule("src/utils/Security.lua", "Security", false)
 RegisterModule("src/utils/Runtime.lua", "Runtime", false)
 RegisterModule("src/utils/Range.lua", "Range", false)
 
+--> Data Types
+RegisterRbxClass("src/types/RBXScriptSignal.lua", "data-types/RBXScriptSignal", false) -- RBXScriptSignal
+RegisterRbxClass("src/types/RBXScriptConnection.lua", "data-types/RBXScriptConnection", false) -- RBXScriptConnection
+
 --> Roblox classes from "src/classes"
 config.CanImportAnyClass = true -- Tweak before importing
 RegisterRbxClass("src/classes/Object.lua", "rbx-classes/Object", false) -- Base class
