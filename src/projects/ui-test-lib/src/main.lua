@@ -1,12 +1,10 @@
 -- Variables
-local rbx = {} -- The current module
-local __projects = {} -- The private projects table
-
-local __token = "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" -- use this instead of rewriting the same token across githubRequire functions.
+local ui = {} -- Main module table
+local __modules = {} -- Private cached modules table
 
 -- Functions
-local RegisterProject
-local GetProject
+local RegisterModule
+local GetModule
 
 -- Require modules from PRIVATE GitHub repository, you don't need it for an public repository though.
 local function githubRequire(path: string, ignoreDefaultPath: boolean)
@@ -20,7 +18,8 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         cleanPath = cleanPath .. ".lua" -- Fix if no extension was given
     end
     if not ignoreDefaultPath then
-        cleanPath = "src/projects/"..cleanPath
+      -- Change the path for your project's location
+        cleanPath = "src/projects/ui-test-lib/"..cleanPath
     end
 
     -- Settings before requesting
@@ -38,6 +37,10 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         Headers = headers
     })
     
+    if not cleanPath:match("src/config%.lua") and config.debugOutputRequirePaths then
+        print(cleanPath)
+    end
+    
     -- Good code :>
     if response.StatusCode == 200 then
         -- Load the module
@@ -48,8 +51,11 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         
         -- Add global variables/functions to module's environment
         env.githubRequire = githubRequire
-        env.getProject = GetProject
+        env.getModule = GetModule
         env.__token = __token -- necessary
+        
+        -- Uncomment and change the match string for your project's configuration file
+        -- if not cleanPath:match("src/config%.lua") then env.config = config end
         
         -- Apply the modified environment to the module
         setfenv(m, env)
@@ -76,24 +82,22 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
     end
 end
 
-RegisterProject = function(path: string, name: string, ignoreDefaultPath: boolean)
-    local project = githubRequire(path, ignoreDefaultPath)
-    __projects[name] = project
+RegisterModule = function(path: string, name: string, ignoreDefaultPath: boolean)
+  local module = githubRequire(path, ignoreDefaultPath)
+  __modules[name] = module
 end
 
-GetProject = function(name: string)
-    local project = __projects[name]
-    if not project then error("Cannot get project '"..name.."' since it's non-existent.") end
-    return project
+GetModule = function(name: string)
+  local module = __modules[name]
+  if not module then error("Cannot get module '"..name.."' since it's non-existent.") end
+  return module
 end
 
 --                   [-CONFIGURATION-]                   --
---> Projects
-RegisterProject("luau-in-luau/src/main.lua", "luau-in-luau", false) -- luau-lang/luau replica in pure Luau.
-RegisterProject("rbx-api-luau/src/main.lua", "rbx-api-luau", false) -- replica of the official Roblox API in pure Luau.
+--> Here you can add the modules you want to cache
+--> Example:
+-- RegisterModule("src/scripts/HelloWorld.lua", "HelloWorld", false)
 
-RegisterProject("ui-test-lib/src/main.lua", "ui-test-lib", false) -- Test UI
-
-rbx.GetProject = GetProject
-
-return rbx
+--> Build module
+ui.GetModule = GetModule
+return ui
