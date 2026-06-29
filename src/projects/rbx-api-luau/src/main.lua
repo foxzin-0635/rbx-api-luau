@@ -172,12 +172,6 @@ RegisterRbxClass("src/classes/Object.lua", "rbx-classes/Object", false) -- Base 
 RegisterRbxClass("src/classes/testClasses/Example.lua", "example/rbx-classes/Example", false) -- Example Class
 config.CanImportAnyClass = false -- Disable Tweak
 
---> Subprojects using this project
-RegisterModule("src/projects/client-studio/src/main.lua", "client-studio", true) -- client-studio subproject
-
---> Required projects for the module
-RegisterModule("src/projects/luau-in-luau/src/main.lua", "luau-in-luau", true) -- luau-in-luau project (Simulate original Luau VM)
-
 --> Add stuff to the main module table
 -- rbx_api.__modules = __modules
 -- rbx_api.__rbxClasses = __rbxClasses
