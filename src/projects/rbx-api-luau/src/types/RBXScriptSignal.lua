@@ -66,13 +66,13 @@ function RBXScriptSignal.new()
   
   local __connections = {}
   
-  self.Connect = function(self, func: (...) -> ()) 
+  self.Connect = function(self, func: (...any) -> ()) 
     local connection = RBXScriptConnection.new(func)
     
     table.insert(__connections, connection)
   end
   
-  self.Fire = function()
+  self.Fire = function(self)
     for i, c in ipairs(__connections) do
       if c.Disconnected then
         table.remove(__connections, i)
