@@ -142,7 +142,7 @@ function RBXScriptSignal.new()
     return coroutine.yield()
   end
   
-  self.Fire = function(self, ...any)
+  self.Fire = function(self, ...: any)
     for i, t in ipairs(__connections) do
       if t.connection.Disconnected then
         table.remove(__connections, i)
@@ -156,11 +156,11 @@ function RBXScriptSignal.new()
       end
       
       if #__yieldingThreads > 0 then
-      for _i, _t in ipairs(__yieldingThreads) do
-        coroutine.resume(_t, v)
-        table.remove(__yieldingThreads, _i)
+        for _i, _t in ipairs(__yieldingThreads) do
+          coroutine.resume(_t, v)
+          table.remove(__yieldingThreads, _i)
+        end
       end
-    end
     end
   end
   
