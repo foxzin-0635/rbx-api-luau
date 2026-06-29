@@ -149,7 +149,7 @@ function RBXScriptSignal.new()
         table.remove(__connections, i)
       end
       
-      local v: any = t.connection.func(args)
+      local v: {any} = table.pack(t.connection.func(args))
       
       if t.type == "once" then
         t.connection:Disconnect()
@@ -158,7 +158,7 @@ function RBXScriptSignal.new()
       
       if #__yieldingThreads > 0 then
         for _i, _t in ipairs(__yieldingThreads) do
-          coroutine.resume(_t, v)
+          coroutine.resume(_t, table.unpack(v))
           table.remove(__yieldingThreads, _i)
         end
       end
