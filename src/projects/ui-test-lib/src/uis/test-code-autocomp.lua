@@ -60,6 +60,7 @@ function autoc.Init()
                   AutomaticCanvasSize = Enum.AutomaticSize.XY,
                   CanvasPosition = Vector2.new(0,0),
                   ScrollBarThickness = 0.5,
+                  CanvasSize = UDim2.new(0,0,0,0)
                   
                   Name = "ScrollBox",
                   Childs = {
