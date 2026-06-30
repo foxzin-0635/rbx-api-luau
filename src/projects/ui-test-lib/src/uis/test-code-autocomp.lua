@@ -113,7 +113,7 @@ function autoc.Init()
         curLineSize = endIdx-startIdx
       else
         i += 1
-        calcLine(endIdx, i)
+        calcLine(endIdx+1, i)
       end
     else
       return
