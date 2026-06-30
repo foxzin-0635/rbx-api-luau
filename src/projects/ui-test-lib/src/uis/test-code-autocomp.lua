@@ -150,7 +150,7 @@ function autoc.Init()
   	local lineHeight = text.TextSize * text.LineHeight
   	local posY = lineHeight * (curLine - 1)
   	
-  	rect.Position = UDim2.fromOffset(textBounds.X, posY)
+  	rect.Position = UDim2.fromOffset(textBounds.X-5, posY+5)
   end)
   
   
