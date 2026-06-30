@@ -126,7 +126,7 @@ function autoc.Init()
     local tbp = Instance.new("GetTextBoundsParams")
     tbp.Size = text.TextSize
     tbp.Text = t
-    tbp.Font = text.Font
+    tbp.Font = text.FontFace
     local tbs = s:GetTextBoundsAsync(tbp)
     calcLine(0,0)
     
