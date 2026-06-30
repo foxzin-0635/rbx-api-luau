@@ -105,7 +105,7 @@ function autoc.Init()
   local function calcLine(endI, i)
     local cur = text.CursorPosition
     
-    local startIdx, endIdx = text.Text:find("[^\n]*", 0)
+    local startIdx, endIdx = text.Text:find("[^\n]*", endI)
     
     if startIdx then
       if cur >= startIdx and cur <= endIdx then
