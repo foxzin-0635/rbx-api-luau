@@ -103,7 +103,7 @@ function autoc.Init()
   local curLineSize = 0
 
   local function calcLine(endI, i)
-    local cur = text.CurrentPosition
+    local cur = text.CursorPosition
     
     local startIdx, endIdx = text.Text:find("[^\n]*", 0)
     
