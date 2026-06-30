@@ -112,6 +112,8 @@ function autoc.Init()
       task.wait()
       local startIdx, endIdx = text.Text:find("[^\n]*", endI)
       
+      print(startIdx, endIdx)
+      
       if cur >= startIdx and cur <= endIdx then
         curLine = i
         curLineSize = endIdx-startIdx
