@@ -2,7 +2,7 @@ local CR = getModule("CreateRecursive")
 local autoc = {}
 
 function autoc.Init()
-  local s = game:GetService("TextService")
+  local TextService = game:GetService("TextService")
   local menu = CR.Create({
     {
       ClassName = "ScreenGui",
