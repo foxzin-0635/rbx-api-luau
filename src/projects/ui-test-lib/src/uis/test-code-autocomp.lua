@@ -110,9 +110,11 @@ function autoc.Init()
     local txt = ""
     local _txtc = text.Text
     
+    local si, ei = 0, 0
+    
     while endI < #text.Text do
       task.wait()
-      local si,ei = _txtc:find("[^\n]*")
+      si,ei += _txtc:find("[^\n]*")
       _txtc = _txtc:sub(ei+1, #text.Text-ei)
       txt = text.Text:sub(si, ei)
       
