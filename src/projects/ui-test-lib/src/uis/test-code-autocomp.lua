@@ -115,25 +115,11 @@ function autoc.Init()
       if cur >= startIdx and cur <= endIdx then
         curLine = i
         curLineSize = endIdx-startIdx
+        break
       else
         i += 1
         endI = endIdx+1
       end
-    end
-    
-    local startIdx, endIdx = text.Text:find("[^\n]*", endI)
-    
-    if startIdx then
-      if cur >= startIdx and cur <= endIdx then
-        curLine = i
-        curLineSize = endIdx-startIdx
-      else
-        if #text.Text == endIdx then return end
-        i += 1
-        calcLine(endIdx+1, i)
-      end
-    else
-      return
     end
   end
 
