@@ -6,6 +6,7 @@ local conf
 -- Functions
 local RegisterModule
 local GetModule
+local githubRequire
 
 local _dtypeof = dtypeof or typeof -- typeof backup
 
@@ -66,40 +67,20 @@ local function pcallForNewContents()
     return res
 end
 
--- Require modules from PRIVATE GitHub repository, you don't need it for an public repository though.
-local function githubRequire(path: string, ignoreDefaultPath: boolean)
-    -- Variables
-    local OWNER = "foxzin-0635" -- My GitHub name
-    local REPO = "rbx-api-luau" -- The current repository
-    local FILE_PATH = path -- The path you've selected to load (not used btw)
-    local TOKEN = __token -- The token (which has read-only access)
-    local cleanPath = path:gsub("^%./", "") -- Cleans the given path for any bad characters (currently "./")
-    if not cleanPath:find("%.lua$") then
-        cleanPath = cleanPath .. ".lua" -- Fix if no extension was given
-    end
-    if not ignoreDefaultPath then
-        cleanPath = "src/projects/luau-in-luau/"..cleanPath
-    end
-
-    -- Settings before requesting
-    local url = "https://api.github.com/repos/" .. OWNER .. "/" .. REPO .. "/contents/" .. cleanPath
-    local headers = {
-        ["Authorization"] = "token " .. TOKEN,
-        ["Accept"] = "application/vnd.github.v3.raw", -- Tells GitHub to return the raw file, not JSON
-        ["User-Agent"] = "Roblox in Luau - Luau in Luau"
-    }
-
-    -- Request for the raw file
-    local response = request({
-        Url = url,
-        Method = "GET",
-        Headers = headers
-    })
-    
-    -- Good code :>
-    if response.StatusCode == 200 then
+if not __token:match("github_PAT_.+", 1) then
+    -- Require modules from PUBLIC GitHub repository
+    githubRequire = function(path: string, ignoreDefaultPath: boolean)
+        local link = "https://raw.githubusercontent.com/foxzin-0635/rbx-in-luau/refs/head/main/"
+        if not ignoreDefaultPath then
+            link ..= "src/projects/luau-in-luau/"
+        end
+        link ..= path:gsub("^%./", "")
+        
+        -- Get the public repository file
+        local _m = game:HttpGet(link, true)
+        
         -- Load the module
-        local m, sErr = loadstring(response.Body)
+        local m, sErr = loadstring(_m)
         if not m then error(sErr) end -- Checks for any errors inside the module
         
         local env = getfenv(m) -- Gets the module's environment
@@ -111,7 +92,7 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         env.getModule = GetModule
         
         -- Not sure why i did this. :P
-        if not cleanPath:match("src/conf%.lua") then
+        if not path:match("src/conf%.lua") then
             env.conf = conf
             for k, _ in pairs(conf.RUNTIME_VARIABLES) do
                 env[k] = conf.RUNTIME_VARIABLES[k]
@@ -130,10 +111,10 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         
         -- Apply the modified environment to the module
         setfenv(m, env)
-        
+            
         -- Executes the module and checks for any errors
         local s, res = pcall(m)
-        
+            
         -- Prints the errors if not succeeded
         -- (it is recursive!)
         if not s then error("Inside '"..cleanPath.."': "..tostring(res)) end
@@ -143,13 +124,94 @@ local function githubRequire(path: string, ignoreDefaultPath: boolean)
         
         -- Returns the module
         return res
-    else
-        -- Fallback for module loading failures
-        -- Known ones that needs to be checked:
-        --  -> 200 = Success
-        --  -> 404 = Not found
-        --  -> 401 = Access Denied (mostly expired token)
-        error("Failed to fetch file: Website gave code " .. tostring(response.StatusCode) .. ".")
+    end
+else
+    -- Require modules from PRIVATE GitHub repository
+    githubRequire = function(path: string, ignoreDefaultPath: boolean)
+        -- Variables
+        local OWNER = "foxzin-0635" -- My GitHub name
+        local REPO = "rbx-in-luau" -- The current repository
+        local FILE_PATH = path -- The path you've selected to load (not used btw)
+        local TOKEN = __token -- The token (which has read-only access)
+        local cleanPath = path:gsub("^%./", "") -- Cleans the given path for any bad characters (currently "./")
+        if not cleanPath:find("%.lua$") then    
+            cleanPath = cleanPath .. ".lua" -- Fix if no extension was given
+        end
+        if not ignoreDefaultPath then
+          -- Change the path for your project's location
+            cleanPath = "src/projects/luau-in-luau/"..cleanPath
+        end
+    
+        -- Settings before requesting
+        local url = "https://api.github.com/repos/" .. OWNER .. "/" .. REPO .. "/contents/" .. cleanPath
+        local headers = {
+            ["Authorization"] = "token " .. TOKEN,
+            ["Accept"] = "application/vnd.github.v3.raw", -- Tells GitHub to return the raw file, not JSON
+            ["User-Agent"] = "Roblox in Luau - Roblox API - Pure Luau"
+        }
+    
+        -- Request for the raw file
+        local response = request({
+            Url = url,
+            Method = "GET",
+            Headers = headers
+        })
+        
+        -- Good code :>
+        if response.StatusCode == 200 then
+            -- Load the module
+            local m, sErr = loadstring(response.Body)
+            if not m then error(sErr) end -- Checks for any errors inside the module
+            
+            local env = getfenv(m) -- Gets the module's environment
+            
+            -- Add global variables/functions to module's environment
+            env.githubRequire = githubRequire
+            env.typeof = typeof_hook
+            env.dtypeof = _dtypeof
+            env.getModule = GetModule
+            
+            -- Not sure why i did this. :P
+            if not cleanPath:match("src/conf%.lua") then
+                env.conf = conf
+                for k, _ in pairs(conf.RUNTIME_VARIABLES) do
+                    env[k] = conf.RUNTIME_VARIABLES[k]
+                end
+            end
+            
+            -- Add new content from other modules
+            local newContent = pcallForNewContents()
+            if next(newContent) ~= nil then
+                if newContent.envContents then
+                    for k,v in pairs(newContent.envContents) do
+                        env[k] = v
+                    end
+                end
+            end
+            
+            -- Apply the modified environment to the module
+            setfenv(m, env)
+            
+            -- Executes the module and checks for any errors
+            local s, res = pcall(m)
+            
+            -- Prints the errors if not succeeded
+            -- (it is recursive!)
+            if not s then error("Inside '"..cleanPath.."': "..tostring(res)) end
+            
+            -- Checks if the module didn't finished properly
+            if not res then error("Module '"..cleanPath.."' compiled successfully, but no result was given. Did you forgot to add a 'return' statement?") end
+            
+            -- Returns the module
+            return res
+        else
+            -- Fallback for module loading failures
+            -- Known ones that needs to be checked:
+            --  -> 200 = Success
+            --  -> 404 = Not found
+            --  -> 401 = Access Denied (mostly expired token)
+            error("Failed to fetch file: Website gave code " .. tostring(response.StatusCode) .. ".")
+        end
     end
 end
 

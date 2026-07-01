@@ -1,112 +1,60 @@
+local window = getModule("presets/window")
 local CR = getModule("CreateRecursive")
 local autoc = {}
 
 function autoc.Init()
   local TextService = game:GetService("TextService")
-  local menu = CR.Create({
+  local menu = window:Create()
+  local text = CR.Create({
     {
-      ClassName = "ScreenGui",
+      ClassName = "ScrollingFrame",
+      BackgroundColor3 = Color3.fromRGB(10,10,10),
+      BorderSizePixel = 0,
+      Size = UDim2.new(1,0,1,0),
+      BackgroundTransparency = 1,
+      
+      AutomaticCanvasSize = Enum.AutomaticSize.XY,
+      CanvasPosition = Vector2.new(0,0),
+      ScrollBarThickness = 0.5,
+      CanvasSize = UDim2.new(0,0,0,0),
+       
+      Name = "ScrollBox",
       Childs = {
         {
-          ClassName = "Frame",
-          BackgroundColor3 = Color3.fromRGB(5,5,5),
+          ClassName = "TextBox",
+          ClearTextOnFocus = false,
           BorderSizePixel = 0,
-          Size = UDim2.new(0,350,0,20),
-          Position = UDim2.fromScale(0.5,0.5),
-          AnchorPoint = Vector2.new(0.5,0.5),
-          Name = "Drag",
+          Size = UDim2.new(1,0,1,0),
+          MultiLine = true,
+          BackgroundTransparency = 1,
+          
+          TextColor3 = Color3.fromRGB(255,255,255),
+          Font = Enum.Font.Code,
+          PlaceholderText = "-- Code here",
+          Text = "",
+          TextSize = 10,
+          TextXAlignment = Enum.TextXAlignment.Left,
+          TextYAlignment = Enum.TextYAlignment.Top,
+          
+          TextWrapped = false,
+          AutomaticSize = Enum.AutomaticSize.XY,
+          
+          Name = "Text",
+          
           Childs = {
             {
-              ClassName = "UICorner"
-            },
-            {
-              ClassName = "Frame",
-              BackgroundColor3 = Color3.fromRGB(5,5,5),
-              BorderSizePixel = 0,
-              Size = UDim2.new(1,0,0,7),
-              Position = UDim2.fromScale(0.5,1),
-              AnchorPoint = Vector2.new(0.5,1),
-            },
-            {
-              ClassName = "UIDragDetector"
-            },
-            {
-              ClassName = "Frame",
-              BackgroundColor3 = Color3.fromRGB(10,10,10),
-              BorderSizePixel = 0,
-              Size = UDim2.new(1,0,0,250),
-              Position = UDim2.fromScale(0.5,1),
-              AnchorPoint = Vector2.new(0.5,0),
-              Name = "Content",
-              Childs = {
-                {
-                  ClassName = "UICorner"
-                },
-                {
-                  ClassName = "Frame",
-                  BackgroundColor3 = Color3.fromRGB(10,10,10),
-                  BorderSizePixel = 0,
-                  Size = UDim2.new(1,0,0,7),
-                  Position = UDim2.fromScale(0.5,0),
-                  AnchorPoint = Vector2.new(0.5,0)
-                },
-                {
-                  ClassName = "ScrollingFrame",
-                  BackgroundColor3 = Color3.fromRGB(10,10,10),
-                  BorderSizePixel = 0,
-                  Size = UDim2.new(1,0,1,0),
-                  BackgroundTransparency = 1,
-                  
-                  AutomaticCanvasSize = Enum.AutomaticSize.XY,
-                  CanvasPosition = Vector2.new(0,0),
-                  ScrollBarThickness = 0.5,
-                  CanvasSize = UDim2.new(0,0,0,0),
-                  
-                  Name = "ScrollBox",
-                  Childs = {
-                    {
-                      ClassName = "TextBox",
-                      ClearTextOnFocus = false,
-                      BorderSizePixel = 0,
-                      Size = UDim2.new(1,0,1,0),
-                      MultiLine = true,
-                      BackgroundTransparency = 1,
-                      
-                      TextColor3 = Color3.fromRGB(255,255,255),
-                      Font = Enum.Font.Code,
-                      PlaceholderText = "-- Code here",
-                      Text = "",
-                      TextSize = 10,
-                      TextXAlignment = Enum.TextXAlignment.Left,
-                      TextYAlignment = Enum.TextYAlignment.Top,
-                      
-                      TextWrapped = false,
-                      AutomaticSize = Enum.AutomaticSize.XY,
-                      
-                      Name = "Text",
-                      
-                      Childs = {
-                        {
-                          ClassName = "UIPadding",
-                          PaddingLeft = UDim.new(0,3),
-                          PaddingTop = UDim.new(0,3),
-                          PaddingRight = UDim.new(0,3),
-                          PaddingBottom = UDim.new(0,3)
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              ClassName = "UIPadding",
+              PaddingLeft = UDim.new(0,3),
+              PaddingTop = UDim.new(0,3),
+              PaddingRight = UDim.new(0,3),
+              PaddingBottom = UDim.new(0,3)
             }
           }
         }
       }
     }
-  }, nil, game:GetService("CoreGui"))
+  }, nil, menu.Drag.Content).Text
 
-  
-  local text = menu.Drag.Content.ScrollBox.Text
   local rect = CR.Create({
     {
       ClassName = "Frame",

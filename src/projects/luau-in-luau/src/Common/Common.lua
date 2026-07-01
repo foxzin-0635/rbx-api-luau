@@ -72,7 +72,7 @@ local FValueClass: FValueModule = (function()
     end
   }
   
-  module.list = {} :: FValue<any>?
+  module.list = nil :: FValue<any>?
   module.type = "FValue"
   module.version = 0
   
@@ -147,7 +147,7 @@ end)()
 local FFlag = {} -- namespace
 
 -- FFlags
-local LUAU_FASTFLAG: FValue<boolean>
+-- local LUAU_FASTFLAG: FValue<boolean> -- it's an extern, it's useless here.
 local function LUAU_FASTFLAGVARIABLE(flag: string): FValue<boolean>
   local fflag = FValueClass.new(flag, false, false)
   FFlag[flag] = fflag
@@ -156,28 +156,28 @@ end
 
 local FInt = {} -- namespace
 
-local LUAU_FASTINT: FValue<number>
+-- local LUAU_FASTINT: FValue<number> -- it's an extern, it's useless here.
 local function LUAU_FASTINTVARIABLE(flag: string, def: number): FValue<number>
   local fflag = FValueClass.new(flag, def, false)
-  FFlag[flag] = fflag
+  FInt[flag] = fflag
   return fflag
 end
 
 local DFFlag = {} -- namespace
 
-local LUAU_DYNAMICFASTFLAG: FValue<boolean>
+-- local LUAU_DYNAMICFASTFLAG: FValue<boolean> -- it's an extern, it's useless here.
 local function LUAU_DYNAMICFASTFLAGVARIABLE(flag: string): FValue<boolean>
   local fflag = FValueClass.new(flag, false, true)
-  FFlag[flag] = fflag
+  DFInt[flag] = fflag
   return fflag
 end
 
 local DFInt = {} -- namespace
 
-local LUAU_DYNAMICFASTINT: FValue<number>
+-- local LUAU_DYNAMICFASTINT: FValue<number> -- it's an extern, it's useless here.
 local function LUAU_DYNAMICFASTINTVARIABLE(flag: string, def: number): FValue<number>
   local fflag = FValueClass.new(flag, def, true)
-  FFlag[flag] = fflag
+  DFFlag[flag] = fflag
   return fflag
 end
 
@@ -193,16 +193,16 @@ Luau.assertCallHandler = assertCallHandler
 Luau.FValue = FValueClass
 Luau.FValueVersionSetter = FValueVersionSetterClass
 
-FFlag.LUAU_FASTFLAG = LUAU_FASTFLAG
+-- FFlag.LUAU_FASTFLAG = LUAU_FASTFLAG
 FFlag.LUAU_FASTFLAGVARIABLE = LUAU_FASTFLAGVARIABLE
 
-FInt.LUAU_FASTINT = LUAU_FASTINT
+-- FInt.LUAU_FASTINT = LUAU_FASTINT
 FInt.LUAU_FASTINTVARIABLE = LUAU_FASTINTVARIABLE
 
-DFFlag.LUAU_DYNAMICFASTFLAG = LUAU_DYNAMICFASTFLAG
+-- DFFlag.LUAU_DYNAMICFASTFLAG = LUAU_DYNAMICFASTFLAG
 DFFlag.LUAU_DYNAMICFASTFLAGVARIABLE = LUAU_DYNAMICFASTFLAGVARIABLE
 
-DFInt.LUAU_DYNAMICFASTINT = LUAU_DYNAMICFASTINT
+-- DFInt.LUAU_DYNAMICFASTINT = LUAU_DYNAMICFASTINT
 DFInt.LUAU_DYNAMICFASTINTVARIABLE = LUAU_DYNAMICFASTINTVARIABLE
 
 Common.Namespaces = {}
