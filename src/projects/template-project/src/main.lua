@@ -10,7 +10,7 @@ local githubRequire
 if not __token:match("github_PAT_.+", 1) then
     -- Require modules from PUBLIC GitHub repository
     githubRequire = function(path: string, ignoreDefaultPath: boolean)
-        local link = "https://raw.githubusercontent.com/foxzin-0635/rbx-in-luau/refs/head/main/"
+        local link = "https://raw.githubusercontent.com/foxzin-0635/rbx-in-luau/main/"
         if not ignoreDefaultPath then
             link ..= "src/projects/template-project/"
         end
