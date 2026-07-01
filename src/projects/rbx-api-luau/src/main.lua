@@ -80,10 +80,10 @@ if not __token:match("github_[pP][aA][tT]_.+", 1) then
             
         -- Prints the errors if not succeeded
         -- (it is recursive!)
-        if not s then error("Inside '"..cleanPath.."': "..tostring(res)) end
+        if not s then error("Inside '"..path.."': "..tostring(res)) end
         
         -- Checks if the module didn't finished properly
-        if not res then error("Module '"..cleanPath.."' compiled successfully, but no result was given. Did you forgot to add a 'return' statement?") end
+        if not res then error("Module '"..path.."' compiled successfully, but no result was given. Did you forgot to add a 'return' statement?") end
         
         -- Returns the module
         return res
