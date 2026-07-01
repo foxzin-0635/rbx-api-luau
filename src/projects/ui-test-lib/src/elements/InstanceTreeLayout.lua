@@ -19,7 +19,8 @@ function InstanceTreeLayout.new()
   return self
 end
 
-function InstanceTreeLayout:GetInstanceByIndex(args: number...)
+function InstanceTreeLayout.GetInstanceByIndex(self, ...: any)
+  local args = {...}
   local inst = nil
   
   for _, i in ipairs(args) do
